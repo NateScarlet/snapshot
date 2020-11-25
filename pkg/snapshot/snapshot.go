@@ -159,6 +159,13 @@ func OptionMatch(match func(a, b []byte)) Option {
 	}
 }
 
+// OptionTransform set transform function
+func OptionTransform(transform func(interface{}) interface{}) Option {
+	return func(so *Options) {
+		so.transform = transform
+	}
+}
+
 // OptionMarshal set marshal function
 func OptionMarshal(marshal func(interface{}) ([]byte, error)) Option {
 	return func(so *Options) {
