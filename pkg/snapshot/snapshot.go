@@ -184,10 +184,14 @@ func OptionUpdate(v bool) Option {
 func Match(t *testing.T, actual interface{}, opts ...Option) {
 	var args = new(Options)
 	args.update = os.Getenv("SNAPSHOT_UPDATE") == "true"
-	args.transform = DefaultTransform
-	args.marshal = DefaultMarshal
 	for _, i := range opts {
 		i(args)
+	}
+	if args.transform == nil {
+		args.transform = DefaultTransform
+	}
+	if args.marshal == nil {
+		args.marshal = DefaultMarshal
 	}
 	if args.match == nil {
 		args.match = func(a, b []byte) {
