@@ -122,7 +122,7 @@ type Options struct {
 	skip      int
 	key       string
 	ext       string
-	match     func(a, b []byte)
+	match     func(expected, actual []byte)
 	transform func(interface{}) interface{}
 	marshal   func(interface{}) ([]byte, error)
 	update    bool
@@ -220,7 +220,7 @@ func Match(t *testing.T, actual interface{}, opts ...Option) {
 		return
 	}
 	require.NoError(t, err)
-	args.match(actualSnapshot, expectedSnapshot)
+	args.match(expectedSnapshot, actualSnapshot)
 }
 
 // MatchJSON compare snapshot in json format
