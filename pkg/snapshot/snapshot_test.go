@@ -12,7 +12,6 @@ func (EmptyStringer) String() string {
 }
 
 func TestMatch(t *testing.T) {
-	type A = []interface{}
 	t.Run("simple", func(t *testing.T) {
 		Match(t, "text", OptionExt(".txt"))
 	})
@@ -34,6 +33,14 @@ func TestMatch(t *testing.T) {
 			C bool
 		}
 		MatchJSON(t, Object{})
+	})
+	t.Run("array of object", func(t *testing.T) {
+		type Object struct {
+			A string
+			B int
+			C bool
+		}
+		MatchJSON(t, []Object{{A: "1"}, {B: 2}, {C: true}})
 	})
 	t.Run("empty object", func(t *testing.T) {
 		type EmptyObject struct{}
