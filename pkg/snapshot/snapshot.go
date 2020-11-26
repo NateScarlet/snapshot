@@ -109,7 +109,7 @@ func DefaultTransform(v interface{}) interface{} {
 		var ret = map[string]interface{}{}
 		var it = rv.MapRange()
 		for it.Next() {
-			ret[it.Key().String()] = DefaultTransform(it.Value().Interface())
+			ret[fmt.Sprint(it.Key().Interface())] = DefaultTransform(it.Value().Interface())
 		}
 		return ret
 	}
