@@ -2,6 +2,7 @@ package snapshot
 
 import (
 	"testing"
+	"time"
 )
 
 type EmptyStringer struct{}
@@ -40,5 +41,8 @@ func TestMatch(t *testing.T) {
 	})
 	t.Run("empty stringer", func(t *testing.T) {
 		MatchJSON(t, EmptyStringer{})
+	})
+	t.Run("time", func(t *testing.T) {
+		MatchJSON(t, time.Date(2020, 11, 26, 0, 0, 0, 0, time.UTC))
 	})
 }
