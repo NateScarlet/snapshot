@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// DefaultTransform before marall object
+// DefaultTransform implementation
 func DefaultTransform(v interface{}) interface{} {
 	if v == nil {
 		return v
@@ -138,42 +138,42 @@ func OptionSkip(skip int) Option {
 	}
 }
 
-// OptionKey set key used in filename
+// OptionKey used in filename
 func OptionKey(key string) Option {
 	return func(so *Options) {
 		so.key = key
 	}
 }
 
-// OptionExt set file extention
+// OptionExt used as file extention
 func OptionExt(ext string) Option {
 	return func(so *Options) {
 		so.ext = ext
 	}
 }
 
-// OptionMatch set match function
+// OptionMatch do assert
 func OptionMatch(match func(a, b []byte)) Option {
 	return func(so *Options) {
 		so.match = match
 	}
 }
 
-// OptionTransform set transform function
+// OptionTransform object before marshal.
 func OptionTransform(transform func(interface{}) interface{}) Option {
 	return func(so *Options) {
 		so.transform = transform
 	}
 }
 
-// OptionMarshal set marshal function
+// OptionMarshal object to bytes.
 func OptionMarshal(marshal func(interface{}) ([]byte, error)) Option {
 	return func(so *Options) {
 		so.marshal = marshal
 	}
 }
 
-// OptionUpdate set if ignore existed file
+// OptionUpdate is whether ignore existed file.
 func OptionUpdate(v bool) Option {
 	return func(so *Options) {
 		so.update = v
