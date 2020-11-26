@@ -1,8 +1,10 @@
 package snapshot
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -20,7 +22,7 @@ func DefaultTransform(v interface{}) interface{} {
 		return v
 	}
 
-	switch v.(type) {
+	switch o := v.(type) {
 	case bool:
 		return v
 	case uint:
@@ -50,7 +52,7 @@ func DefaultTransform(v interface{}) interface{} {
 	case string:
 		return v
 	case []byte:
-		return v
+		return hex.EncodeToString(o)
 	}
 
 	rv := reflect.ValueOf(v)
@@ -63,10 +65,19 @@ func DefaultTransform(v interface{}) interface{} {
 		}
 		return DefaultTransform(rv.Elem().Interface())
 	case reflect.Slice:
-		fallthrough
-	case reflect.Array:
 		if rv.IsNil() {
 			return nil
+		}
+		fallthrough
+	case reflect.Array:
+		if rv.Type().Elem().Kind() == reflect.Uint8 {
+			var bytes = make([]byte, rv.Len())
+			for i := 0; i < rv.Len(); i++ {
+				bytes[i] = uint8(rv.Index(i).Uint())
+			}
+			return map[string]interface{}{
+				"$" + rv.Type().Name(): hex.EncodeToString(bytes),
+			}
 		}
 		var ret = []interface{}{}
 		for i := 0; i < rv.Len(); i++ {
@@ -85,10 +96,12 @@ func DefaultTransform(v interface{}) interface{} {
 		}
 		if len(ret) == 0 {
 			return map[string]interface{}{
-				"$" + rv.Type().Name(): v,
+				"$" + rv.Type().Name(): fmt.Sprint(v),
 			}
 		}
-		return ret
+		return map[string]interface{}{
+			"$" + rv.Type().Name(): ret,
+		}
 	case reflect.Map:
 		if rv.IsNil() {
 			return nil
