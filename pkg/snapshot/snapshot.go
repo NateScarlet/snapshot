@@ -77,7 +77,7 @@ func OptionUpdate(v bool) Option {
 // Match compare object with file store under __snapshots__ folder
 func Match(t *testing.T, actual interface{}, opts ...Option) {
 	var args = new(Options)
-	args.update = os.Getenv("SNAPSHOT_UPDATE") == "true"
+	args.update = DefaultUpdate
 	for _, i := range opts {
 		i(args)
 	}

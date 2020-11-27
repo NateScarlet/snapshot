@@ -1,19 +1,25 @@
 package snapshot
 
-// DefaultTransform when snapshot transform option not set
+import "os"
+
+// DefaultTransform option
 var DefaultTransform Transform
 
-// DefaultMarshal when snapshot marshal option not set
+// DefaultMarshal option
 var DefaultMarshal Marshal
 
-// DefaultAssertEqual when snapshot assertEqual option not set
+// DefaultAssertEqual option
 var DefaultAssertEqual AssertEqual
+
+// DefaultUpdate option
+var DefaultUpdate bool
 
 // ResetDefaults to initial values.
 func ResetDefaults() {
 	DefaultTransform = TransformJSON
 	DefaultMarshal = MarshalTextOrJSON
 	DefaultAssertEqual = AssertEqualBytes
+	DefaultUpdate = os.Getenv("SNAPSHOT_UPDATE") == "true"
 }
 
 func init() {
