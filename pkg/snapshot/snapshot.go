@@ -8,19 +8,18 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 // Options for snapshot match
 type Options struct {
-	skip      int
-	key       string
-	ext       string
-	match     func(expected, actual []byte)
-	transform func(interface{}) interface{}
-	marshal   func(interface{}) ([]byte, error)
-	update    bool
+	skip        int
+	key         string
+	ext         string
+	transform   Transform
+	marshal     Marshal
+	assertEqual AssertEqual
+	update      bool
 }
 
 // Option mutate SnapshotOptions
@@ -47,10 +46,10 @@ func OptionExt(ext string) Option {
 	}
 }
 
-// OptionMatch do assert
-func OptionMatch(match func(a, b []byte)) Option {
+// OptionAssertEqual do assert
+func OptionAssertEqual(assertEqual AssertEqual) Option {
 	return func(so *Options) {
-		so.match = match
+		so.assertEqual = assertEqual
 	}
 }
 
@@ -88,10 +87,8 @@ func Match(t *testing.T, actual interface{}, opts ...Option) {
 	if args.marshal == nil {
 		args.marshal = DefaultMarshal
 	}
-	if args.match == nil {
-		args.match = func(a, b []byte) {
-			assert.Equal(t, string(a), string(b))
-		}
+	if args.assertEqual == nil {
+		args.assertEqual = DefaultAssertEqual
 	}
 	if args.key == "" {
 		args.key = t.Name()
@@ -115,7 +112,7 @@ func Match(t *testing.T, actual interface{}, opts ...Option) {
 		return
 	}
 	require.NoError(t, err)
-	args.match(expectedSnapshot, actualSnapshot)
+	args.assertEqual(t, expectedSnapshot, actualSnapshot)
 }
 
 // MatchJSON compare snapshot in json format
@@ -125,9 +122,7 @@ func MatchJSON(t *testing.T, actual interface{}, opts ...Option) {
 			[]Option{
 				OptionSkip(1),
 				OptionExt(".json"),
-				OptionMatch(func(a, b []byte) {
-					assert.JSONEq(t, string(a), string(b))
-				}),
+				OptionAssertEqual(AssertEqualJSON),
 			},
 			opts...,
 		)...,
