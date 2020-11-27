@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/NateScarlet/snapshot/compare/v0.2.0...v0.3.0) (2020-11-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* OptionMatch -> OptionAssertEqual
+
+### Features
+
+* add TransformSchema MapFromStruct MapOmit ([bd2bf32](https://github.com/NateScarlet/snapshot/commit/bd2bf3254437234d1897b50c9afe6f87a8bc619f))
+* allow change default options ([09180e4](https://github.com/NateScarlet/snapshot/commit/09180e49d3684768e916361bde0bb354283cba53))
+* allow change default update option ([7b48b06](https://github.com/NateScarlet/snapshot/commit/7b48b06569d84a7e0779ce4e09bb168157621003))
+* handle non string map key ([d4a2879](https://github.com/NateScarlet/snapshot/commit/d4a28790452e7d7a2ae75935578f3956f319b0bb))
+* OptionMatch -> OptionAssertEqual ([db2a537](https://github.com/NateScarlet/snapshot/commit/db2a5375096cefa4621611d48cdcbcb2342b57b1))
+
 ## [0.2.0](https://github.com/NateScarlet/snapshot/compare/v0.1.2...v0.2.0) (2020-11-26)
 
 
