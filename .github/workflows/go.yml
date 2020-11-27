@@ -1,11 +1,7 @@
 name: Go
 on:
   push:
-    paths:
-      - "**.go"
   pull_request:
-    paths:
-      - "**.go"
   workflow_dispatch:
 jobs:
   build:
