@@ -59,7 +59,7 @@ func TransformJSON(v interface{}) interface{} {
 		if rv.IsNil() {
 			return nil
 		}
-		return DefaultTransform(rv.Elem().Interface())
+		return TransformJSON(rv.Elem().Interface())
 	case reflect.Slice:
 		if rv.IsNil() {
 			return nil
@@ -77,26 +77,21 @@ func TransformJSON(v interface{}) interface{} {
 		}
 		var ret = []interface{}{}
 		for i := 0; i < rv.Len(); i++ {
-			ret = append(ret, DefaultTransform(rv.Index(i).Interface()))
+			ret = append(ret, TransformJSON(rv.Index(i).Interface()))
 		}
 		return ret
 	case reflect.Struct:
-		var ret = map[string]interface{}{}
-		for i := 0; i < rv.NumField(); i++ {
-			var f = rv.Type().Field(i)
-			// Skip un-exported fields.
-			if f.PkgPath != "" {
-				continue
-			}
-			ret[f.Name] = DefaultTransform(rv.Field(i).Interface())
+		var m = MapFromStruct(v)
+		for k, v := range m {
+			m[k] = TransformJSON(v)
 		}
-		if len(ret) == 0 {
+		if len(m) == 0 {
 			return map[string]interface{}{
 				"$" + rv.Type().Name(): fmt.Sprint(v),
 			}
 		}
 		return map[string]interface{}{
-			"$" + rv.Type().Name(): ret,
+			"$" + rv.Type().Name(): m,
 		}
 	case reflect.Map:
 		if rv.IsNil() {
@@ -105,12 +100,90 @@ func TransformJSON(v interface{}) interface{} {
 		var ret = map[string]interface{}{}
 		var it = rv.MapRange()
 		for it.Next() {
-			ret[fmt.Sprint(it.Key().Interface())] = DefaultTransform(it.Value().Interface())
+			ret[fmt.Sprint(it.Key().Interface())] = TransformJSON(it.Value().Interface())
 		}
 		return ret
 	}
 
 	return map[string]interface{}{
 		"$" + rv.Type().Name(): v,
+	}
+}
+
+// TransformSchema that only keep type info.
+// Useful when handling dynamic data like timestamp.
+//
+// Returns:
+//
+//   nil
+//     when value is nil
+//
+//   $[]byte
+//     when value is byte slice
+//
+//   $[length]byte
+//     when value is byte array
+//
+//   []interface{}
+//     when value is slice or array
+//
+//   {"$pointer": value }
+//     when value is potinter
+//
+//   {"$"+type: map[string]interace{}}
+//     when value is struct and has any exported fields.
+//
+//   map[string]interace{}
+//     when value is map
+//
+//   "$"+type
+//     default
+func TransformSchema(v interface{}) interface{} {
+	if v == nil {
+		return v
+	}
+
+	type M = map[string]interface{}
+	type A = []interface{}
+
+	var rv = reflect.ValueOf(v)
+	var rt = rv.Type()
+	switch rt.Kind() {
+	case reflect.Interface:
+		return TransformSchema(rv.Elem().Interface())
+	case reflect.Ptr:
+		return M{"$pointer": TransformSchema(rv.Elem().Interface())}
+	case reflect.Slice:
+		if rv.Type().Elem().Kind() == reflect.Uint8 {
+			return "$[]byte"
+		}
+		fallthrough
+	case reflect.Array:
+		if rv.Type().Elem().Kind() == reflect.Uint8 {
+			return fmt.Sprintf("$[%d]byte", rv.Len())
+		}
+		var ret = []interface{}{}
+		for i := 0; i < rv.Len(); i++ {
+			ret = append(ret, TransformSchema(rv.Index(i).Interface()))
+		}
+		return ret
+	case reflect.Struct:
+		var m = MapFromStruct(v)
+		for k, v := range m {
+			m[k] = TransformSchema(v)
+		}
+		if len(m) == 0 {
+			return "$" + rv.Type().Name()
+		}
+		return map[string]interface{}{"$" + rt.Name(): m}
+	case reflect.Map:
+		var ret = map[string]interface{}{}
+		var it = rv.MapRange()
+		for it.Next() {
+			ret[fmt.Sprint(it.Key().Interface())] = TransformSchema(it.Value().Interface())
+		}
+		return ret
+	default:
+		return "$" + rt.Name()
 	}
 }

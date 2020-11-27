@@ -1,0 +1,6 @@
+{
+  "bool": "$bool",
+  "int": "$int",
+  "string": "$string",
+  "time": "$Time"
+}

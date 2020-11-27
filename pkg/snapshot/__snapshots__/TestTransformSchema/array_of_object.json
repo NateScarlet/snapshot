@@ -1,0 +1,23 @@
+[
+  {
+    "$Object": {
+      "A": "$string",
+      "B": "$int",
+      "C": "$bool"
+    }
+  },
+  {
+    "$Object": {
+      "A": "$string",
+      "B": "$int",
+      "C": "$bool"
+    }
+  },
+  {
+    "$Object": {
+      "A": "$string",
+      "B": "$int",
+      "C": "$bool"
+    }
+  }
+]
