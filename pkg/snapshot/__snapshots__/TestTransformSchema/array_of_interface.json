@@ -1,9 +1,11 @@
-{
-  "$array": {
+[
+  {
     "$Object": {
       "A": "$string",
       "B": "$int",
       "C": "$bool"
     }
-  }
-}
+  },
+  null,
+  "$int"
+]

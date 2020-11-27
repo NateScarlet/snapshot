@@ -37,8 +37,16 @@ func TestTransformSchema(t *testing.T) {
 		MatchJSON(t, Object{})
 	})
 	t.Run("array of object", func(t *testing.T) {
-
 		MatchJSON(t, []Object{{A: "1"}, {B: 2}, {C: true}})
+	})
+	t.Run("array of interface", func(t *testing.T) {
+		MatchJSON(t, []interface{}{Object{A: "1"}, nil, 1})
+	})
+	t.Run("array of map", func(t *testing.T) {
+		MatchJSON(t, []interface{}{
+			map[string]int{"a": 1},
+			map[string]interface{}{"a": 1},
+		})
 	})
 	t.Run("empty object", func(t *testing.T) {
 		type EmptyObject struct{}

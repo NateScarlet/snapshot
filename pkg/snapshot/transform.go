@@ -124,6 +124,10 @@ func TransformJSON(v interface{}) interface{} {
 //   $[length]byte
 //     when value is byte array
 //
+//   {"$array": interface{}}
+//     when value is slice or array
+//     and all element schema is deep equal.
+//
 //   []interface{}
 //     when value is slice or array
 //
@@ -165,6 +169,16 @@ func TransformSchema(v interface{}) interface{} {
 		var ret = []interface{}{}
 		for i := 0; i < rv.Len(); i++ {
 			ret = append(ret, TransformSchema(rv.Index(i).Interface()))
+		}
+		var multiple bool
+		for index := 1; index < len(ret); index++ {
+			if !reflect.DeepEqual(ret[0], ret[1]) {
+				multiple = true
+				break
+			}
+		}
+		if !multiple {
+			return map[string]interface{}{"$array": ret[0]}
 		}
 		return ret
 	case reflect.Struct:
