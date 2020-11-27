@@ -65,3 +65,25 @@ func TestTransformSchema(t *testing.T) {
 		MatchJSON(t, map[Object]interface{}{{A: "1"}: 2})
 	})
 }
+
+func TestDynamicData(t *testing.T) {
+	type TODO struct {
+		ID      int
+		Created time.Time
+		Name    string
+	}
+	MatchJSON(t,
+		TODO{
+			ID:      1,
+			Created: time.Now(),
+			Name:    "job1",
+		},
+		OptionTransform(func(i interface{}) interface{} {
+			var m = MapFromStruct(i)
+			if v, ok := m["Created"]; ok {
+				m["Created"] = TransformSchema(v)
+			}
+			return m
+		}),
+	)
+}
