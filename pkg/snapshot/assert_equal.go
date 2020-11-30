@@ -7,7 +7,7 @@ import (
 )
 
 // AssertEqual fails test if snapshot not equal with actual value.
-type AssertEqual func(t *testing.T, expected, actual []byte)
+type AssertEqual = func(t *testing.T, expected, actual []byte)
 
 // AssertEqualBytes compare each byte
 func AssertEqualBytes(t *testing.T, expected, actual []byte) {
