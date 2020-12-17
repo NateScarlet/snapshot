@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/NateScarlet/snapshot/compare/v0.4.0...v0.5.0) (2020-12-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* not escape html when MarshalTextOrJSON
+
+### Features
+
+* change AssertEqual to a type alias ([bacf829](https://github.com/NateScarlet/snapshot/commit/bacf829916f8e10af78a2f87173cebb918ebca5d))
+* not escape html when MarshalTextOrJSON ([f55569e](https://github.com/NateScarlet/snapshot/commit/f55569e41958f157786cc9eeb8eea2060d496290))
+
 ## [0.4.0](https://github.com/NateScarlet/snapshot/compare/v0.3.0...v0.4.0) (2020-11-27)
 
 
