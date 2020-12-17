@@ -1,6 +1,9 @@
 package snapshot
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Marshal go object to bytes
 type Marshal = func(value interface{}) ([]byte, error)
@@ -13,5 +16,11 @@ func MarshalTextOrJSON(v interface{}) ([]byte, error) {
 	case []byte:
 		return o, nil
 	}
-	return json.MarshalIndent(v, "", "  ")
+
+	var b = new(bytes.Buffer)
+	var enc = json.NewEncoder(b)
+	enc.SetIndent("", "  ")
+	enc.SetEscapeHTML(false)
+	var err = enc.Encode(v)
+	return b.Bytes(), err
 }
