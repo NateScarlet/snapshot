@@ -83,7 +83,8 @@ func CleanRegex(pattern regexp.Regexp, clean Clean) Clean {
 				)
 				var r = clean(ret[p:q])
 				offset += len(r) - (q - p)
-				ret = append(append(ret[:p], r...), ret[q:]...)
+				var b = make([]byte, 0, len(v)+offset)
+				ret = append(append(append(b, ret[:p]...), r...), ret[q:]...)
 			}
 		}
 		return

@@ -1,0 +1,8 @@
+{
+  "$Object": {
+    "A": 1,
+    "ACount": "*count*",
+    "B": 2,
+    "BCount": "*count*"
+  }
+}

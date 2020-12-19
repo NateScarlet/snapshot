@@ -29,5 +29,19 @@ func TestCleanRegexp(t *testing.T) {
 			D: time.Now(),
 		}, OptionCleanRegex(CleanAs("*time*"), `"D": {\s+"\$Time": "(.+)"\s+}`))
 	})
+	t.Run("multiple match", func(t *testing.T) {
+		type Object struct {
+			A      int
+			B      int
+			ACount int
+			BCount int
+		}
+		MatchJSON(t, Object{
+			A:      1,
+			B:      2,
+			ACount: 1,
+			BCount: 2,
+		}, OptionCleanRegex(CleanAs(`"*count*"`), `(?m)^\s*".+Count": (\d+),?$`))
+	})
 
 }
