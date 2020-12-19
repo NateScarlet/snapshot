@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"testing"
 
@@ -18,6 +19,7 @@ type Options struct {
 	ext         string
 	transform   Transform
 	marshal     Marshal
+	clean       Clean
 	assertEqual AssertEqual
 	update      bool
 }
@@ -67,6 +69,42 @@ func OptionMarshal(marshal func(interface{}) ([]byte, error)) Option {
 	}
 }
 
+// OptionClean dynamic data to make result deterministic.
+// multiple clean option take affect in order.
+func OptionClean(clean ...Clean) Option {
+	return func(so *Options) {
+		var orig = so.clean
+		so.clean = func(v []byte) (ret []byte) {
+			ret = v
+			if orig != nil {
+				ret = orig(ret)
+			}
+			for _, i := range clean {
+				ret = i(ret)
+			}
+			return
+		}
+	}
+}
+
+// OptionCleanRegex replace all patten match by clean function,
+// panic if any pattern is invalid.
+func OptionCleanRegex(clean Clean, patterns ...string) Option {
+	var c = make([]Clean, 0, len(patterns))
+	for _, i := range patterns {
+		c = append(c, CleanRegex(*regexp.MustCompile(i), clean))
+	}
+	return OptionClean(c...)
+}
+
+// OptionCleanRegexMask mask word matched by patterns to '*',
+// panic if any pattern is invalid.
+func OptionCleanRegexMask(patterns ...string) Option {
+	return OptionCleanRegex(func(v []byte) []byte {
+		return []byte(MaskString(string(v), '*', IsNonWord))
+	}, patterns...)
+}
+
 // OptionUpdate is whether ignore existed file.
 func OptionUpdate(v bool) Option {
 	return func(so *Options) {
@@ -99,6 +137,10 @@ func Match(t *testing.T, actual interface{}, opts ...Option) {
 	require.NoError(t, os.MkdirAll(filepath.Dir(p), 0755))
 	actualSnapshot, err := args.marshal(args.transform(actual))
 	require.NoError(t, err)
+	if args.clean != nil {
+		actualSnapshot = args.clean(actualSnapshot)
+	}
+
 	update := func() error {
 		return ioutil.WriteFile(p, actualSnapshot, 0644)
 	}
