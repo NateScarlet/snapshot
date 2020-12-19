@@ -15,7 +15,6 @@ Store snapshot files under `__snapshots__` folder relative to caller file.
 
 set `SNAPSHOT_UPDATE` env var to `true` to update existed snapshot file.
 
-
 ## Usage
 
 ```go
@@ -66,12 +65,18 @@ func TestSomeThing(t *testing.T) {
     // }
 
     // Clean dynamic data to make result deterministic
-    snapshot.MatchJSON(t, Object{
-        A: "a",
-        B: 1,
-        C: true,
-        D: time.Now(),
-    }, OptionCleanRegex(CleanAs("*time*"), `"D": {\s+"\$Time": "(.+)"\s+}`))
+    snapshot.MatchJSON(t, 
+        Object{
+            A: "a",
+            B: 1,
+            C: true,
+            D: time.Now(),
+        }, 
+        snapshot.OptionCleanRegex(
+            snapshot.CleanAs("*time*"),
+            `"D": {\s+"\$Time": "(.+)"\s+}`,
+        ),
+    )
     // snapshot:
     // {
     //   "$Object": {
