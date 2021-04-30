@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/NateScarlet/snapshot/compare/v0.5.2...v0.6.0) (2021-04-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* correct name of `MaskWordAsAsterisk`
+
+### Bug Fixes
+
+* correct name of `MaskWordAsAsterisk` ([b87f129](https://github.com/NateScarlet/snapshot/commit/b87f129bb780de416d8be7ffbb29ce66013440bd))
+
 ### [0.5.2](https://github.com/NateScarlet/snapshot/compare/v0.5.1...v0.5.2) (2020-12-19)
 
 
