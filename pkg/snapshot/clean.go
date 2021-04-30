@@ -23,7 +23,7 @@ func MaskString(v string, as rune, keep func(c rune) bool) string {
 	return b.String()
 }
 
-// IsNonWord return true when rune in [0-9a-zA-Z].
+// IsNonWord return true when rune not in [0-9a-zA-Z].
 func IsNonWord(c rune) bool {
 	if '0' <= c && '9' >= c {
 		return false
@@ -42,8 +42,8 @@ func MaskAsAsterisk(v []byte) []byte {
 	return []byte(MaskString(string(v), '*', func(c rune) bool { return false }))
 }
 
-// MaskNonWordAsAsterisk treat data as string and replace all non word characters to `*`.
-func MaskNonWordAsAsterisk(v []byte) []byte {
+// MaskWordAsAsterisk treat data as string and replace all word characters to `*`.
+func MaskWordAsAsterisk(v []byte) []byte {
 	return []byte(MaskString(string(v), '*', IsNonWord))
 }
 

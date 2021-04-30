@@ -7,13 +7,13 @@ import (
 
 func TestCleanRegexp(t *testing.T) {
 	t.Run("simple", func(t *testing.T) {
-		Match(t, "text", OptionCleanRegex(MaskNonWordAsAsterisk, "ex"))
+		Match(t, "text", OptionCleanRegex(MaskWordAsAsterisk, "ex"))
 	})
 	t.Run("group", func(t *testing.T) {
-		Match(t, "text", OptionCleanRegex(MaskNonWordAsAsterisk, "t(e)x"))
+		Match(t, "text", OptionCleanRegex(MaskWordAsAsterisk, "t(e)x"))
 	})
 	t.Run("multiple group", func(t *testing.T) {
-		Match(t, "text", OptionCleanRegex(MaskNonWordAsAsterisk, "t(e)(x)"))
+		Match(t, "text", OptionCleanRegex(MaskWordAsAsterisk, "t(e)(x)"))
 	})
 	t.Run("object", func(t *testing.T) {
 		type Object struct {
