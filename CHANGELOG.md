@@ -4,28 +4,25 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [0.6.0](https://github.com/NateScarlet/snapshot/compare/v0.5.2...v0.6.0) (2021-04-30)
 
-
 ### ⚠ BREAKING CHANGES
 
-* correct name of `MaskWordAsAsterisk`
+- correct name of `MaskWordAsAsterisk`
 
 ### Bug Fixes
 
-* correct name of `MaskWordAsAsterisk` ([b87f129](https://github.com/NateScarlet/snapshot/commit/b87f129bb780de416d8be7ffbb29ce66013440bd))
+- correct name of `MaskWordAsAsterisk` ([b87f129](https://github.com/NateScarlet/snapshot/commit/b87f129bb780de416d8be7ffbb29ce66013440bd))
 
 ### [0.5.2](https://github.com/NateScarlet/snapshot/compare/v0.5.1...v0.5.2) (2020-12-19)
 
-
 ### Bug Fixes
 
-* unexpected array reuse ([9554ac2](https://github.com/NateScarlet/snapshot/commit/9554ac2c23873f1e5638594bd10ad871f1d4f78f))
+- unexpected array reuse ([9554ac2](https://github.com/NateScarlet/snapshot/commit/9554ac2c23873f1e5638594bd10ad871f1d4f78f))
 
 ### [0.5.1](https://github.com/NateScarlet/snapshot/compare/v0.5.0...v0.5.1) (2020-12-19)
 
-
 ### Features
 
-* allow clean data after marshall ([8ee5d17](https://github.com/NateScarlet/snapshot/commit/8ee5d172c513c0304c7c551706f658a1ee93c27f))
+- allow clean data after marshall ([8ee5d17](https://github.com/NateScarlet/snapshot/commit/8ee5d172c513c0304c7c551706f658a1ee93c27f))
 
 ## [0.5.0](https://github.com/NateScarlet/snapshot/compare/v0.4.0...v0.5.0) (2020-12-17)
 
